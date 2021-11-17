@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FunStuff
 {
@@ -85,6 +86,10 @@ namespace FunStuff
             return result;
         }
 
+        static string Tasks(int number)
+        {
+
+        }
 
         /// <summary>
         /// This method manually creates x threads based on the amount of logical processors
@@ -238,6 +243,60 @@ namespace FunStuff
             if (carry > 0)
                 toReturn = carry + toReturn;
 
+
+            return toReturn;
+        }
+
+
+        private static string SingleM(int x, string y, string zeroes)
+        {
+            string toBuild = zeroes;
+
+            int carry = 0;
+
+
+            for (int i = y.Length - 1; i >= 0; i--)
+            {
+                int yM = y[i] - '0';
+
+                int mResult = x * yM + carry;
+
+                carry = mResult / 10;
+                toBuild = mResult % 10 + toBuild;
+
+            }
+            if (carry > 0)
+                toBuild = carry + toBuild;
+
+            return toBuild;
+        }
+
+        public static async Task<string> ThreadedMultiply(string x, string y)
+        {
+            List<Task<string>> tasks = new List<Task<string>>();
+            string toReturn = "";
+            for (int p = y.Length - 1; p >= 0; p--)
+            {
+                string toBuild = "";
+                //this loop is for adding the leading zeros when multiplying
+                for (int addZeros = y.Length - 1 - p; addZeros > 0; addZeros--)
+                {
+                    toBuild += "0";
+                }
+           
+                int yM = y[p] - '0';
+
+                tasks.Add(Task.Run(()=>SingleM(yM, x, toBuild)));
+
+                toReturn = Add(toReturn, toBuild);
+            }
+
+            while (tasks.Count > 0)
+            {
+                var task = await Task.WhenAny(tasks);
+                toReturn = Add(toReturn,(await task));
+                tasks.Remove(task);
+            }
 
             return toReturn;
         }
