@@ -10,69 +10,15 @@ namespace FunStuff
     /// </summary>
     class FactorialCalculator
     {
-        static void Main(string[] args)
-        {
-            bool useThreading = false;
-            bool compare = false;
-            Console.WriteLine("Use all processors (0), Use Single Processor(1), Compare both(2)");
-            string answer = Console.ReadLine();
-            if(answer == "1")
-            {
-                Console.WriteLine("Using a single processor (for large numbers will be slower");
+        
+       
 
-            }
-            else if(answer == "0")
-            {
-                useThreading = true;
-                Console.WriteLine($"Using {Environment.ProcessorCount} processors");
-            }
-            else
-            {
-                compare = true;
-                Console.WriteLine($"Comparing times for single vs {Environment.ProcessorCount} processors");
-            }
-            while (true)
-            {
-
-                
-                //we can't use a long for calculating
-                //a long can only hold 9,223,372,036,854,775,807
-                //this is easily surpassed after a factorial of only 20! (wow amazing!)
-                Console.WriteLine("Enter Number: ");
-                var number = int.Parse(Console.ReadLine());
-
-                var startTime = DateTime.Now;
-                string result = "";
-
-                if (compare)
-                {
-                    result = SingleProcessor(number);
-                    PrintResults(result, "Single Processor", DateTime.Now - startTime);
-                    startTime = DateTime.Now;
-                    result = Threading(number, Environment.ProcessorCount);
-                    PrintResults(result, $"{Environment.ProcessorCount} Processors", DateTime.Now - startTime);
-                }
-                else if (!useThreading)
-                {
-                    result = SingleProcessor(number);
-                    PrintResults(result, "Single Processor", DateTime.Now - startTime);
-
-                }
-                else
-                {
-                    result = Threading(number, Environment.ProcessorCount);
-                    PrintResults(result, $"{Environment.ProcessorCount} Processors", DateTime.Now - startTime);
-                }
-
-            }
-        }
-
-        static void PrintResults(string result,string type, TimeSpan time)
+        public static void PrintResults(string result,string type, TimeSpan time)
         {
             Console.WriteLine($"{type} took ({time}): {result}");
         }
 
-        static string SingleProcessor(int number)
+        public static string SingleProcessor(int number)
         {
             
 
@@ -88,7 +34,7 @@ namespace FunStuff
 
         static string Tasks(int number)
         {
-
+            return "";
         }
 
         /// <summary>
@@ -107,7 +53,7 @@ namespace FunStuff
         /// <param name="number"></param>
         /// <param name="processors"></param>
         /// <returns></returns>
-        static string Threading(int number, int processors)
+        public static string Threading(int number, int processors)
         {
             
             (string result, bool done)[] results = new (string result, bool done)[processors];
